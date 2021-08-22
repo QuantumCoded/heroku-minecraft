@@ -13,5 +13,5 @@ minecraft.stdout.pipe(process.stdout);
 */
 
 createServer((req, res) => {
-    if (req.url && new URL(req.url).href === '/') createReadStream('index.html').pipe(res);
+    createReadStream('index.html').pipe(res);
 }).listen(process.env.PORT);
