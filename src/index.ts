@@ -1,29 +1,30 @@
 import { spawn } from 'child_process';
 import { Server } from 'ws';
 import express from 'express';
+import { createConnection } from 'net';
 import * as path from 'path';
 
 const app = express()
     .use((req, res) => res.sendFile(req.path || 'index.html', { root: process.cwd() }))
     .listen(process.env.PORT || 3000);
 
-const wss = new Server({ server: app });
+const minecraft = spawn('../jdk-16.0.2/bin/java', ['-jar', 'server.jar', '--nogui'], {
+    stdio: ['pipe', 'pipe', 'pipe'],
+    cwd: path.join(process.cwd(), 'minecraft'),
+}).on('data', d => {
+    if ((d as Buffer).toString().includes('Done')) {
+        const wss = new Server({ server: app });
 
-wss.on('connection', (ws) => {
-    const minecraft = spawn('../jdk-16.0.2/bin/java', ['-jar', 'server.jar', '--nogui'], {
-        stdio: ['pipe', 'pipe', 'pipe'],
-        cwd: path.join(process.cwd(), 'minecraft'),
-    });
+        wss.on('connection', ws => {
+            const s = createConnection(25565, 'localhost');
 
-    minecraft.stdout.on('data', d => ws.send(d.toString()));
+            s.on('ready', () => {
+                ws.on('message', m => s.write(m.toString()));
+                ws.on('close', () => s.end());
 
-	ws.on('message', m => {
-		/* const a = m.toString().replace(/\n+$/, '').split(' ');
-		const p = spawn(a.shift() || '', a, { stdio: ['pipe', 'pipe', 'pipe'] });
-		p.on('error', console.error);
-		p.stdout.setEncoding('utf-8').on('data', s => ws.send(s.replace(/\n+$/, '')));
-		p.stderr.setEncoding('utf-8').on('data', s => ws.send(s.replace(/\n+$/, ''))); */
-
-        minecraft.stdin.write(m.toString() + '\n');
-	});
+                s.on('data', d => ws.send(d));
+                s.on('end', () => ws.close());
+            });
+        });
+    }
 });
