@@ -5,29 +5,31 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>heroku</title>
         <script>
-            const ws = new WebSocket(location.origin.replace(/^http/, 'ws'));
-            const c = document.querySelector('#console');
-            const form = document.querySelector('form');
+            windows.onload = () => {
+                const ws = new WebSocket(location.origin.replace(/^http/, 'ws'));
+                const c = document.querySelector('#console');
+                const form = document.querySelector('form');
 
-            c.value = '';
-            form.children[0].value = '';
-            ws.onmessage = m => c.value += m.data.toString() + '\n';
-            
-            if(form.attachEvent) {
-                form.attachEvent('submit', p);
-            } else {
-                form.addEventListener('submit', p);
-            }
-
-            function p(e) {
-                if (e.preventDefault) e.preventDefault();
-
-                if (ws.OPEN) {
-                    ws.send(form.children[0].value);
-                    form.children[0].value = '';
+                c.value = '';
+                form.children[0].value = '';
+                ws.onmessage = m => c.value += m.data.toString() + '\n';
+                
+                if(form.attachEvent) {
+                    form.attachEvent('submit', p);
+                } else {
+                    form.addEventListener('submit', p);
                 }
 
-                return false;
+                function p(e) {
+                    if (e.preventDefault) e.preventDefault();
+
+                    if (ws.OPEN) {
+                        ws.send(form.children[0].value);
+                        form.children[0].value = '';
+                    }
+
+                    return false;
+                }
             }
         </script>
 	</head>
