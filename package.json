@@ -1,0 +1,25 @@
+{
+  "name": "heroku-minecraft",
+  "version": "1.0.0",
+  "description": "Run minecraft on heroku?",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node dist/index.js",
+    "postinstall": "curl -O https://download.java.net/java/GA/jdk16.0.2/d4a915d82b4c4fbb9bde534da945d746/7/GPL/openjdk-16.0.2_linux-x64_bin.tar.gz && tar xf openjdk-16.0.2_linux-x64_bin.tar.gz && tsc"
+  },
+  "keywords": [
+    "heroku",
+    "minecraft"
+  ],
+  "author": "QuantumCoded",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^16.7.1",
+    "@types/ws": "^7.4.7",
+    "typescript": "^4.3.5"
+  },
+  "dependencies": {
+    "ws": "^8.2.0"
+  }
+}

@@ -1,0 +1,6 @@
+minecraft-static/
+node_modules/
+dist/
+jdk-*/
+openjdk-*
+package-lock.json

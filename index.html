@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>heroku</title>
+        <script>
+            const ws = new WebSocket(location.origin.replace(/^http/, 'ws'));
+            const c = document.getElementById('console');
+            const form = document.querySelector('form');
+
+            c.value = '';
+            form.children[0].value = '';
+            ws.onmessage = m => c.value += m.data.toString() + '\n';
+            
+            if(form.attachEvent) {
+                form.attachEvent('submit', p);
+            } else {
+                form.addEventListener('submit', p);
+            }
+
+            function p(e) {
+                if (e.preventDefault) e.preventDefault();
+
+                if (ws.OPEN) {
+                    ws.send(form.children[0].value);
+                    form.children[0].value = '';
+                }
+                
+                return false;
+            }
+        </script>
+	</head>
+	<body>
+		<p>Console</p>
+		<textarea id="console" cols="80" rows="40"></textarea>
+		<br>
+		<form id="form">
+			<input type="text">
+			<input type="submit">
+		</form>
+		<script src="index.js"></script>
+	</body>
+</html>
