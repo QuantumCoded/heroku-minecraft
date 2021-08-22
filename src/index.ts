@@ -15,7 +15,7 @@ wss.on('connection', (ws) => {
         cwd: path.join(process.cwd(), 'minecraft'),
     });
 
-    minecraft.stdout.on('data', d => ws.send(d));
+    minecraft.stdout.on('data', d => ws.send(d.toString()));
 
 	ws.on('message', m => {
 		/* const a = m.toString().replace(/\n+$/, '').split(' ');
