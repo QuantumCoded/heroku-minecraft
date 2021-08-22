@@ -6,7 +6,7 @@
 		<title>heroku</title>
         <script>
             const ws = new WebSocket(location.origin.replace(/^http/, 'ws'));
-            const c = document.getElementById('console');
+            const c = document.querySelector('#console');
             const form = document.querySelector('form');
 
             c.value = '';
