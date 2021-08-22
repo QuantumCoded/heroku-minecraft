@@ -4,16 +4,16 @@ import express from 'express';
 import { createConnection } from 'net';
 import * as path from 'path';
 
-const app = express()
+/* const app = express()
     .use((req, res) => res.sendFile(req.path || 'index.html', { root: process.cwd() }))
-    .listen(process.env.PORT || 3000);
+    .listen(process.env.PORT || 3000); */
 
 const minecraft = spawn('../jdk-16.0.2/bin/java', ['-jar', 'server.jar', '--nogui'], {
     stdio: ['pipe', 'pipe', 'pipe'],
     cwd: path.join(process.cwd(), 'minecraft'),
 }).on('data', d => {
     if ((d as Buffer).toString().includes('Done')) {
-        const wss = new Server({ server: app });
+        const wss = new Server({ port: parseInt(process.env.PORT || '3000') });
 
         wss.on('connection', ws => {
             const s = createConnection(25565, 'localhost');
