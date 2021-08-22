@@ -5,7 +5,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>heroku</title>
         <script>
-            windows.onload = () => {
+            window.onload = () => {
                 const ws = new WebSocket(location.origin.replace(/^http/, 'ws'));
                 const c = document.querySelector('#console');
                 const form = document.querySelector('form');
